@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import GSAP from 'gsap'
 
 const scene = new THREE.Scene();
-const geometry = new THREE.SphereGeometry(0.5, 32, 16);
+const geometry = new THREE.SphereGeometry(1, 32, 16);
 const material = new THREE.MeshBasicMaterial
 (
     { 
@@ -15,10 +15,16 @@ const sizes = {
     width: 800,
     height: 600
 }
+
+let timer = new THREE.Clock;
+
 const animate = () => {
     requestAnimationFrame(animate);
     // cubemesh.rotation.x += 0.005;
-    // cubemesh.rotation.y += 0.01;
+    let dtime = timer.getDelta()
+    cubemesh.rotation.x += 2 * dtime;
+    cubemesh.rotation.y += 5 * dtime;
+    cubemesh.rotation.z += 2 * dtime;
     // cubemesh.rotation.z += 0.02;
     renderer.render(scene, camera);
 };
@@ -30,14 +36,14 @@ camera.position.z = 2;
 camera.position.x = 0;
 
 //// GSAP ANIMATION
-GSAP.to ( cubemesh.rotation,
-    {
-        duration: 2,
-        y: 2,
-        repeat: -1,
-        yoyo: true
-    }
-)
+// GSAP.to ( cubemesh.rotation,
+//     {
+//         duration: 2,
+//         y: 2,
+//         repeat: -1,
+//         yoyo: true
+//     }
+// )
 
 scene.add(camera);
 scene.add(cubemesh)
