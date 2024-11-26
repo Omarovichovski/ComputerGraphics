@@ -1,86 +1,104 @@
-// TEXTURES
-
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
 
 const scene = new THREE.Scene();
-const box = new THREE.BoxGeometry(1, 1, 1);
-const boxmaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x00ff00, emissiveIntensity: 0.5 });
-const boxmesh = new THREE.Mesh(box, boxmaterial);
 
-const phongMaterial = new THREE.MeshPhongMaterial(
-    {
-        color: 0xff0000,
-        specular: 0xff0000,
-        shininess: 70
-    }
-)
+const ambientLight = new THREE.AmbientLight()
+ambientLight.color = new THREE.Color(0xffffff)
+ambientLight.intensity = 0.5
+scene.add(ambientLight)
 
-const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5,32,32), phongMaterial)
+const pointLight = new THREE.PointLight(0xffffff, 50)
+pointLight.position.x = 2
+pointLight.position.y = 3
+pointLight.position.z = 4
+scene.add(pointLight)
 
-const transparentMaterial = new THREE.MeshStandardMaterial(
-    {
-        color: 0x0000ff,
-        transparent: true,
-        opacity: 0.4
-    }
-)
+const directionalLight = new THREE.DirectionalLight(0xff0000, 1);
+directionalLight.position.set(1,0.25,0);
+scene.add(directionalLight);
 
-const cylinder = new THREE.Mesh(new THREE.CylinderGeometry(1,1,2,32,32),transparentMaterial)
-cylinder.rotateY(1.2);
-cylinder.rotateZ(0.2);
+const dlHelper = new THREE.DirectionalLightHelper(directionalLight,5);
+scene.add(dlHelper)
 
-const startColor = new THREE.Color(0xff0000);
-const endColor = new THREE.Color(0x0000ff);
+const hemiLight = new THREE.HemisphereLight(0x00ff00,0x0000ff,1);
+scene.add(hemiLight)
 
-const interpolateColor = startColor.clone().lerp(endColor,0.5)
-const interpolateMaterial = new THREE.MeshBasicMaterial({color:interpolateColor});
-const interpolateCube = new THREE.Mesh(new THREE.BoxGeometry(0.3,0.,3),interpolateMaterial);
-interpolateCube.position.y = 1;
+const spotlight = new THREE.SpotLight(0xff00ff, 2, 15, Math.PI/2-0.7)
+spotlight.position.set(-1,0.4,-1)
+spotlight.rotateZ(0.23)
+scene.add(spotlight)
 
-const ambientlight = new THREE.AmbientLight(0xffffff, 0.2)
+const slHelper = new THREE.SpotLightHelper(spotlight);
+scene.add(slHelper)
 
-const pointlight = new THREE.PointLight(0xffffff,3,5)
-pointlight.position.set(-1,-0.5,1);
+const material = new THREE.MeshStandardMaterial();
+material.roughness = 0.4;
 
-const clock = new THREE.Clock;
+const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), material);
+sphere.position.x = -1.5;
 
-const animate = () => {
-    requestAnimationFrame(animate);
-    boxmesh.rotateX(0.013)
-    boxmesh.rotateY(0.079)
-    
-    
-    boxmesh.position.x = Math.cos(clock.getElapsedTime());
-    boxmesh.position.y = Math.sin(clock.getElapsedTime());
-    boxmesh.position.z = Math.sin(clock.getElapsedTime());
+const cube = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.75, 0.75), material);
 
-    sphere.position.x = Math.tan(clock.getElapsedTime());
+const torus = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.2, 32, 64), material);
+torus.position.x = 1.5;
 
-    renderer.render(scene, camera);
-};
+const plane = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), material);
+plane.rotation.x = -Math.PI * 0.5;
+plane.position.y = -0.65;
+
+scene.add(sphere, cube, torus, plane);
 
 const sizes = {
-    width: 800,
-    height: 600
-}
+    width: window.innerWidth,
+    height: window.innerHeight,
+};
 
-const camera = new THREE.OrthographicCamera(sizes.width / - 128, sizes.width / 128, sizes.height / 128, sizes.height / - 128 , 1, 1000);
-camera.position.z = 5;
-camera.position.x = 0;
+window.addEventListener('resize', () => {
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
 
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+camera.position.set(1, 1, 2);
 scene.add(camera);
-scene.add(ambientlight);
-scene.add(pointlight);
-scene.add(boxmesh);
-scene.add(sphere);
-scene.add(cylinder);
-scene.add(interpolateCube);
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(1200, 900)
-document.getElementById("scene").appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, document.body); 
+controls.enableDamping = true;
 
 
-animate();
+const renderer = new THREE.WebGLRenderer(); 
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    
+document.body.appendChild(renderer.domElement);
+
+
+const clock = new THREE.Clock();
+
+const tick = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    sphere.rotation.y = 0.1 * elapsedTime;
+    cube.rotation.y = 0.1 * elapsedTime;
+    torus.rotation.y = 0.1 * elapsedTime;
+
+    sphere.rotation.x = 0.15 * elapsedTime;
+    cube.rotation.x = 0.15 * elapsedTime;
+    torus.rotation.x = 0.15 * elapsedTime;
+
+    controls.update();
+
+    renderer.render(scene, camera);
+
+    window.requestAnimationFrame(tick);
+};
+
+tick();
