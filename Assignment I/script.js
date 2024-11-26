@@ -286,7 +286,7 @@ scene.add(person2);
 scene.add(person3);
 scene.add(person4);
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({antialias: false});
 renderer.setSize(1200, 900)
 document.getElementById("scene").appendChild(renderer.domElement);
 const controls = new OrbitControls( camera, renderer.domElement );
