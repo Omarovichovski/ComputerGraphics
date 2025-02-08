@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Homework</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+</head>
+<body>
+    <a-scene>
+        <a-camera position="0 1.5 -5" look-controls="enabled: true;"></a-camera>
+        <a-light type="ambient" intensity="0.6" color="#fdc"></a-light>
+        
+        <a-entity light="type: spot; intensity:0.6; penumbra:0.08" position="0 3.2 -4.2" rotation="-90 0 0"></a-entity>
+        <!-- <a-sphere position="0 2.8 -4.2" radius="0.5" color="yellow" opacity="0.7" wireframe="true"></a-sphere> -->
+        
+        <a-entity light="type: spot; intensity:0.6; penumbra:0.08" position="0 3.2 -2.2" rotation="-90 0 0"></a-entity>
+        <!-- <a-sphere position="0 2.8 -2.2" radius="0.5" color="yellow" opacity="0.7" wireframe="true"></a-sphere> -->
+
+        <a-assets>
+            <a-asset-item id="window-glb" src="window.glb"></a-asset-item>
+             <!-- Blackboard by Poly by Google [CC-BY] via Poly Pizza -->
+            <a-asset-item id="blackboard-glb" src="Blackboard.glb"></a-asset-item>
+             <!-- Executive Chair by Zsky [CC-BY] via Poly Pizza -->
+            <a-asset-item id="chair-glb" src="Executive Chair.glb"></a-asset-item>
+            <a-asset-item id="teacher-desk-glb" src="Desk.glb"></a-asset-item>
+            <a-asset-item id="student-desk-obj" src="student-desk.obj"></a-asset-item>
+            <a-asset-item id="student-desk-mtl" src="student-desk.mtl"></a-asset-item>
+            <a-asset-item id="light-glb" src="light.glb"></a-asset-item>
+          </a-assets>
+        
+    
+        <!-- Windowside wall -->
+        <a-plane position="-1.749 1.5 -5.5" width="1" height="2" rotation="0 90 0" material="color: gray; normalMap:url(plasterwall.png); side: double;"></a-plane>
+        <a-plane position="-1.749 2.25 -4.25" width="1.5" height="0.5" rotation="0 90 0" material="color: gray; normalMap:url(plasterwall.png); side: double;"></a-plane>
+        <a-plane position="-1.749 0.75 -4.25" width="1.5" height="0.5" rotation="0 90 0" material="color: gray; normalMap:url(plasterwall.png); side: double;"></a-plane>
+        <a-plane position="-1.749 1.5 -2.25" width="2.5" height="2" rotation="0 90 0" material="color: gray; normalMap:url(plasterwall.png); side: double;"></a-plane>
+        
+        <!-- Window here -->
+        <a-box position="-1.749 2 -4.25" width="0.1" height="0.05" depth="1.5" material="color: #8B4513;"></a-box>
+        <a-box position="-1.749 1 -4.25" width="0.1" height="0.05" depth="1.5" material="color: #8B4513;"></a-box>
+        <a-box position="-1.749 1.5 -3.5" width="0.1" height="1.05" depth="0.05" material="color: #8B4513;"></a-box>
+        <a-box position="-1.749 1.5 -5" width="0.1" height="1.05" depth="0.05" material="color: #8B4513;"></a-box>
+
+        <a-plane position="-1.8 1.5 -3.5" width="5" height="2" rotation="0 -90 0" material="color: gray; side: double; src:url(outside.jpg);"></a-plane>
+
+        <!-- Other walls -->
+        <a-plane position="0 1.5 -1.001" width="3.5" height="2" material="color: gray; side: double; normalMap:url(plasterwall.png);"></a-plane>
+        <a-plane position="1.749 1.5 -3.5" width="5" height="2" rotation="0 -90 0" material="color: gray; side: double; normalMap:url(plasterwall.png);"></a-plane>
+        <a-plane position="0 1.5 -5.999" width="3.5" height="2" material="color: gray; side: double; normalMap:url(plasterwall.png);"></a-plane>
+        
+        <a-plane position="0 2.499 -3.5" rotation="-90 0 0" width="3.5" height="5" material="color: gray; normalMap:url(plasterwall.png); repeat: 1 1; side: double" shadow="cast: true; receive: true;"></a-plane>
+        <a-plane position="0 0.501 -3.5" rotation="-90 0 0" width="3.5" height="5" material="color: gray; src:url(floor.jpg); repeat: 1 1" shadow="cast: true; receive: true;"></a-plane>
+
+        <a-gltf-model src="#blackboard-glb" position="0 1.2 -6" scale="1.2 1.2 1.2" shadow="cast: true; receive: true;"></a-gltf-model>
+        <a-gltf-model src="#teacher-desk-glb" position="-0.9 0.5 -5.2" scale="0.7 0.7 0.5" rotation="0 180 0" shadow="cast: true; receive: true;"></a-gltf-model>
+        <a-gltf-model src="#chair-glb" position="-1 0.6 -5.5" scale="0.4 0.4 0.4" shadow="cast: true; receive: true;"></a-gltf-model>
+        
+        <a-gltf-model src="#light-glb" position="0.25 2.5 -4.2" scale="0.02 0.02 0.02" rotation="0 0 0" material="emissive: #fff; emissive-intensity: 2.0"></a-gltf-model>
+        <a-gltf-model src="#light-glb" position="0.25 2.5 -2.2" scale="0.02 0.02 0.02" rotation="0 0 0" material="emissive: #fff; emissive-intensity: 2.0"></a-gltf-model>
+        
+        <a-obj-model src="#student-desk-obj" mtl="#student-desk-mtl" position="-1.1 0.5 -4.25" scale="0.05 0.05 0.05" shadow="cast: true; receive: true;"></a-obj-model>
+        <a-obj-model src="#student-desk-obj" mtl="#student-desk-mtl" position="-0 0.5 -4.25" scale="0.05 0.05 0.05" shadow="cast: true; receive: true;"></a-obj-model>
+        <a-obj-model src="#student-desk-obj" mtl="#student-desk-mtl" position="-1.1 0.5 -3.25" scale="0.05 0.05 0.05" shadow="cast: true; receive: true;"></a-obj-model>
+        <a-obj-model src="#student-desk-obj" mtl="#student-desk-mtl" position="-0 0.5 -3.25" scale="0.05 0.05 0.05" shadow="cast: true; receive: true;"></a-obj-model>
+        
+    </a-scene>
+</body>
+</html>
